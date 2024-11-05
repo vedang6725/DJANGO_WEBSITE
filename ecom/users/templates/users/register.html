@@ -1,0 +1,110 @@
+{% extends 'watch/base.html' %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-3">
+                <!-- Header -->
+                <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #6D83F2, #9AEBED); color: white; font-size: 24px; font-weight: bold; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                    Create Your Account
+                </div>
+                
+                <!-- Form Body -->
+                <div class="card-body px-4 py-4">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- Username -->
+                        <div class="mb-3 row" style="text-align: center;">
+                            <label for="username" class="col-sm-4 col-form-label">Username</label>
+                            <div class="col-sm-8">
+                                {{ form.username }}
+                                {% for error in form.username.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3 row" style="text-align: center;">
+                            <label for="email" class="col-sm-4 col-form-label">Email Address</label>
+                            <div class="col-sm-8">
+                                {{ form.email }}
+                                {% for error in form.email.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- First Name -->
+                        <div class="mb-3 row" style="text-align: center;">
+                            <label for="first_name" class="col-sm-4 col-form-label">First Name</label>
+                            <div class="col-sm-8">
+                                {{ form.first_name }}
+                                {% for error in form.first_name.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="mb-3 row" style="text-align: center;">
+                            <label for="last_name" class="col-sm-4 col-form-label">Last Name</label>
+                            <div class="col-sm-8">
+                                {{ form.last_name }}
+                                {% for error in form.last_name.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Mobile Number -->
+                        <div class="mb-3 row" style="text-align: center;">
+                            <label for="mob_num" class="col-sm-4 col-form-label">Mobile Number</label>
+                            <div class="col-sm-8">
+                                {{ form.mob_num }}
+                                {% for error in form.mob_num.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3 row" style="text-align: center;">
+                            <label for="password1" class="col-sm-4 col-form-label">Password</label>
+                            <div class="col-sm-8">
+                                {{ form.password1 }}
+                                {% for error in form.password1.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="mb-4 row" style="text-align: center;">
+                            <label for="password2" class="col-sm-4 col-form-label">Confirm Password</label>
+                            <div class="col-sm-8">
+                                {{ form.password2 }}
+                                {% for error in form.password2.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary btn-lg text-uppercase fw-bold" style="background-color: #6D83F2; border: none;" type="submit">Sign Up</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer with Login Option -->
+                <div class="card-footer text-center py-3" style="background-color: #f8f9fa;">
+                    <p class="mb-0">Already have an account? <a href="{% url 'login' %}" class="text-primary fw-bold">Login here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

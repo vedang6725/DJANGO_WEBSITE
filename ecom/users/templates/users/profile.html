@@ -1,0 +1,71 @@
+{% extends 'watch/base.html' %}
+{% block body %}
+
+<br><br><br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="card glass-card" style="background: rgba(255, 255, 255, 0.08); border-radius: 20px; backdrop-filter: blur(15px); box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.4);">
+                <div class="card-header text-white" style="background: linear-gradient(135deg, #ff416c, #1a73e8); border-radius: 20px 20px 0 0;">
+                    <div class="card-title" style="font-size: 24px; font-weight: bold;">
+                         Profile
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="d-flex align-items-center mb-3 position-relative">
+                            <!-- Hidden file input -->
+                            <input type="file" id="id_image" name="image" style="display: none;" onchange="updateImage(this)" accept="image/*">
+                            <!-- Profile Image -->
+                            <img id="image_preview" src="data:image/png;base64,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" alt="Profile Image" style="border-radius: 50%; border: 4px solid #ffffff; box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);" height="100px" width="100px">
+
+                            <!-- Add Icon -->
+                            <!-- <div class="add-icon" onclick="document.getElementById('id_image').click();" style="position: absolute; left: 80px; top: 60px; cursor: pointer;">
+                                <i class="bi bi-plus-circle-fill"></i>
+                            </div> -->
+                        </div>
+                        <h4 style="color: #007bff; margin-bottom: 5px;">{{ user.first_name }} {{ user.last_name }}</h4>
+                        <h4 style="color: #007bff; margin-bottom: 5px;">{{ user.email }} </h4>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br><br>
+
+<style>
+    .glass-card {
+        animation: fadeInUp 0.8s ease-in-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            transform: translateY(50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+</style>
+
+<script>
+    // Function to preview the image
+    function updateImage(input) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('image_preview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+
+{% endblock %}

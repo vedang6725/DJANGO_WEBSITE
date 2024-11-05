@@ -1,0 +1,173 @@
+{% extends 'watch/base.html' %}
+{% block body %}
+
+<style>
+    /* Custom Styles */
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif; /* Clean modern font */
+        color: #333; /* Dark text for readability */
+    }
+    
+    .card-1 {
+        border: none;
+        border-radius: 30px; /* More pronounced rounded corners */
+        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
+        background: #ffffff; /* Clean white for cards */
+        margin-bottom: 40px; /* Spacing for cards */
+        transition: transform 0.2s; /* Smooth scaling effect */
+    }
+    
+    .card-1:hover {
+        transform: scale(1.02); /* Subtle scaling on hover for emphasis */
+    }
+
+    .card-2 {
+        border: none;
+        border-radius: 20px; /* Moderate rounding for inner cards */
+        background-color: #ffffff; /* Clean white for inner cards */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        position: relative; /* For pseudo-element styling */
+    }
+
+    .card-2::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        background: rgba(0, 123, 255, 0.1); /* Soft blue overlay for emphasis */
+        z-index: 0; /* Positioned behind content */
+    }
+    
+    .card-body {
+        position: relative; /* For z-index to bring content in front of the overlay */
+        z-index: 1;
+        padding: 20px; /* Padding for better spacing */
+    }
+
+    .order-status {
+        font-weight: bold;
+        color: #007bff; /* Blue for order status */
+    }
+
+    .cancel-button {
+        background-color: #dc3545; /* Bootstrap danger color */
+        color: white;
+        border-radius: 5px;
+        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        padding: 10px 15px; /* Padding for better touch targets */
+    }
+
+    .cancel-button:hover {
+        background-color: #c82333;
+        transform: translateY(-2px); /* Slight lift effect on hover */
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+    }
+
+    .total-paid {
+        font-weight: bold;
+        color: #333; /* Darker text for contrast */
+    }
+
+    .total-amount {
+        font-size: 3rem; /* Larger size for total amount */
+        color: #007bff; /* Professional blue */
+    }
+
+    .media img {
+        border-radius: 15px; /* Round image corners for modern look */
+        transition: transform 0.2s; /* Smooth scaling effect */
+    }
+
+    .media img:hover {
+        transform: scale(1.05); /* Slight zoom on hover */
+    }
+
+    h3, h5, h6 {
+        margin: 0; /* Remove default margins for better alignment */
+    }
+
+    .header-title {
+        font-size: 2rem; /* Larger header */
+        font-weight: bold; /* Bold header */
+        color: #333; /* Dark text for contrast */
+        margin-bottom: 10px; /* Space below header */
+    }
+
+    .sub-title {
+        font-size: 1.2rem; /* Smaller subtitle */
+        color: #555; /* Grey color for subtleties */
+    }
+
+    .divider {
+        border: none;
+        border-top: 1px solid #ddd; /* Subtle divider line */
+        margin: 20px 0; /* Spacing above and below */
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .card-1 {
+            width: 90%; /* Full width on smaller screens */
+        }
+
+        .total-amount {
+            font-size: 2rem; /* Adjust font size for smaller screens */
+        }
+    }
+</style>
+
+{% if previous_orders %}
+<div class="container-fluid p-5">
+    <div class="card card-1 mx-auto" style="width: 70%;">
+        <div class="card-header text-center">
+            <h3 class="header-title">Thanks for your Order!</h3>
+            <p class="sub-title">We appreciate your business!</p>
+        </div>
+        <div class="card-body">
+            {% for order in previous_orders %}
+            <div class="card card-2 mb-4">
+                <div class="card-body">
+                    <div class="media d-flex align-items-center">
+                        <img class="img-fluid mr-4" src="{{ order.item.item_image }}" width="100" height="100" />
+                        <div class="row my-auto flex-column flex-md-row w-100">
+                            <div class="col my-auto p-4">
+                                <h5>{{ order.item.item_name }}</h5>
+                                <small class="text-muted">{{ order.item.item_desc }}</small>
+                            </div>
+                            <div class="col my-auto p-3 text-right">
+                                <h6>Order Id: {{ order.order_id }}</h6>
+                                <small>Qty: {{ order.quantity }}</small>
+                                <h6 class="mt-2">Item Price: ${{ order.item.item_price }}</h6>
+                                <h5 class="total-amount">Total Amount: ${{ order.total_amount }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="divider">
+                    <div class="row align-items-center">
+                        <div class="col-3"><i>Order Status:</i></div>
+                        <div class="col-6 order-status">
+                            <h3>{{ order.order_status }}</h3>
+                        </div>
+                        <a class="btn cancel-button col-2" href="{% url 'watch:cancel_order' order.order_id %}">Cancel Order</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0 total-paid">TOTAL PAID</h2>
+                    <h1 class="total-amount">$ {{ grand_total }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="container text-center p-5">
+    <h1>No Previous Orders Found</h1>
+</div>
+{% endif %}
+{% endblock %}

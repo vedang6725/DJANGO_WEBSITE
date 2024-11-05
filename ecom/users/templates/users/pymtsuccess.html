@@ -1,0 +1,49 @@
+{% extends 'watch/base.html' %}
+
+{% block body %}
+<div class="container d-flex align-items-center justify-content-center vh-100">
+    <div class="card text-center shadow-lg p-5" style="border-radius: 1.5rem; max-width: 500px;">
+        <div class="card-body">
+            <div class="d-flex justify-content-center align-items-center mb-4">
+                <div class="rounded-circle bg-light d-flex justify-content-center align-items-center" 
+                     style="height: 120px; width: 120px; background-color: rgba(46, 204, 113, 0.1);">
+                    <i class="bi bi-check2-circle text-success" style="font-size: 4rem;"></i>
+                </div>
+            </div>
+            <h1 class="fw-bold text-dark">Payment Successful</h1>
+            <p class="text-muted fs-5">Your order has been successfully placed! You'll receive a confirmation soon.</p>
+            <a href="{% url 'watch:index' %}" class="btn btn-gradient mt-4 py-2 px-5">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Icons (for the checkmark icon) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+<!-- Custom Button Gradient -->
+<style>
+    .btn-gradient {
+        background: linear-gradient(135deg, #27ae60, #2ecc71);
+        border: none;
+        color: white;
+        font-weight: 600;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-gradient:hover {
+        background: linear-gradient(135deg, #2ecc71, #27ae60);
+        box-shadow: 0 4px 15px rgba(46, 204, 113, 0.6);
+        transform: translateY(-3px);
+    }
+
+    .card-body {
+        position: relative;
+    }
+
+    .rounded-circle {
+        background: rgba(46, 204, 113, 0.1);
+    }
+
+</style>
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends 'watch/base.html' %}
+
+{% block body %}
+
+<style>
+    .container {
+        margin-top: 50px;
+        padding: 30px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .box-element {
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        color: #333;
+        margin-bottom: 20px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .form-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+    }
+
+    .form-control {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    #paypal-button-container {
+        text-align: center;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin-top: 20px;
+        }
+
+        .box-element {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Check form validity on every input change
+        const form = document.getElementById('billing-form');
+        const paypalButtonContainer = document.getElementById('paypal-button-container');
+        
+        paypal.Buttons({
+            style: {
+                color: 'blue',
+                shape: 'pill',
+                label: 'pay',
+                height: 40,
+            },
+            onInit: function (data, actions) {
+                actions.disable(); // Disable PayPal button initially
+
+                form.addEventListener('input', function () {
+                    if (form.checkValidity()) {
+                        actions.enable();  // Enable button if form is valid
+                    } else {
+                        actions.disable(); // Disable button if form is invalid
+                    }
+                });
+            },
+            createOrder: function (data, actions) {
+                if (!form.checkValidity()) {
+                    alert("Please fill out the form before proceeding.");
+                    return false;
+                }
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: "{{ grand_total }}"
+                        }
+                    }]
+                });
+            },
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (details) {
+                    // Process payment details
+                    fetch("{% url 'users:oa' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-type": "application/json",
+                            "X-CSRFToken": getCookie('csrftoken'),
+                        },
+                        body: JSON.stringify({
+                            orderID: 10,
+                            transID: details.id,
+                            payment_method: 'PayPal',
+                            status: details.status,
+                        }),
+                    }).then(response => response.json())
+                      .then(data => {
+                          window.location.href = "{% url 'users:ps' %}";
+                      });
+                });
+            }
+        }).render('#paypal-button-container');
+    });
+</script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="box-element">
+                <h3>Billing Information</h3>
+                <form id="billing-form" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="inputFirst" class="form-label">First Name</label>
+                            <input type="text" class="form-control" placeholder="First name" aria-label="First name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="inputLast" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" placeholder="Last name" aria-label="Last name" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputEmail4" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="inputEmail4" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputAddress" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="inputAddress" placeholder="Flat number and Building name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputAddress2" class="form-label">Address 2</label>
+                        <input type="text" class="form-control" id="inputAddress2" placeholder="Area name and Landmark" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="inputCity" class="form-label">City</label>
+                            <input type="text" class="form-control" id="inputCity" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="inputState" class="form-label">State</label>
+                            <input type="text" class="form-control" id="inputState" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="inputZip" class="form-label">Pin Code</label>
+                            <input type="number" class="form-control" id="inputZip" min="100000" max="999999" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-12">
+            <div class="box-element">
+                <h3>Pay ${{ grand_total }}</h3>
+                <div id="paypal-button-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

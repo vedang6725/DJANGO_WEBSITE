@@ -1,0 +1,22 @@
+{% extends 'watch/base.html' %}
+{% block body %}
+<div class="container">
+    <div class="card mx-auto mt-5" style="max-width: 50%;">
+        <div class="card text-center">
+            <div class="card-header">
+                <h1 class="card-title">Cancel Order</h1>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Are you sure you want to cancel order #{{ order.order_id }}?</p>
+            </div>
+            <div class="card-footer">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" name="confirm" value="yes">Yes, cancel order</button>
+                    <a href="{% url 'watch:myorders' %}" class="btn btn-secondary">No, go back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

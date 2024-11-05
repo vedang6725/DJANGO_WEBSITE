@@ -1,0 +1,88 @@
+{% extends 'watch/base.html' %}
+
+
+{% block body %}
+<style>
+    body {
+        background-color: #f9f9f9; /* Softer light background for a clean look */
+        font-family: 'Arial', sans-serif; /* Modern font for better readability */
+    }
+
+    .container {
+        margin-top: 100px; /* Increased top margin for better spacing */
+    }
+
+    .card {
+        border-radius: 20px; /* More pronounced rounded corners for a modern touch */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+        background-color: #ffffff; /* White background for a clean look */
+    }
+
+    .card-header {
+        border-top-left-radius: 20px; /* Rounded corners on top */
+        border-top-right-radius: 20px; /* Rounded corners on top */
+        background: linear-gradient(to right, #ff4b5c, #ff6a88); /* Gradient background for header */
+        color: #ffffff; /* White text for contrast */
+    }
+
+    .lead {
+        color: #555; /* Subtle text color for better readability */
+    }
+
+    .btn-danger {
+        transition: background-color 0.3s ease, transform 0.2s;
+        background-color: #dc3545; /* Bootstrap's primary red */
+        border-radius: 25px; /* More rounded button corners */
+        padding: 10px 20px; /* Increased padding for larger buttons */
+        border: none; /* No border for a cleaner look */
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333; /* Darker shade on hover */
+        transform: scale(1.05); /* Slight scaling effect on hover */
+    }
+
+    .btn-secondary {
+        transition: background-color 0.3s ease, transform 0.2s;
+        background-color: #6c757d; /* Bootstrap's secondary color */
+        border-radius: 25px; /* More rounded button corners */
+        padding: 10px 20px; /* Increased padding for larger buttons */
+        border: none; /* No border for a cleaner look */
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268; /* Darker shade on hover */
+        transform: scale(1.05); /* Slight scaling effect on hover */
+    }
+
+    h4 {
+        margin-bottom: 0; /* Remove bottom margin for a tighter header */
+    }
+
+    h5 {
+        margin-bottom: 20px; /* Margin for spacing between text elements */
+        color: #333; /* Darker color for the question */
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4 class="font-weight-bold">Logout Confirmation</h4>
+                </div>
+                <div class="card-body text-center">
+                    <p class="lead">You are about to log out. Please confirm your action.</p>
+                    <h5>Are you sure you want to logout?</h5>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-lg">Yes, Logout</button>
+                        <a href="{% url 'watch:index' %}" class="btn btn-secondary btn-lg ml-3">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

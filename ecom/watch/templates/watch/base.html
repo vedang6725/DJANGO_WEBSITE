@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1" />
+		<title>NEXUS</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+			crossorigin="anonymous" />
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+			crossorigin="anonymous"></script>
+		<script src="https://www.paypal.com/sdk/js?client-id=AWpVGwtslJ_FF4cqTORdFmuqR6QU7pqbiTSmKQC7ON-TyVdJFrlPKojLDkedTtt-IlZE8ZrNh0V1imRL&currency=USD"></script>
+	</head>
+    <style>
+        body {
+        font-family: "Poppins", sans-serif;
+        background: #bac8f8;
+        color: #fff;
+        }
+
+        header {
+            background-color: #0d1117;
+            border-bottom: 2px solid #0ea5e9;
+            padding: 5px 10;
+            transition: background 0.3s;
+          }
+
+          .nav-link:hover {
+            color: #0ea5e9 !important;
+          }
+
+          .nav-link {
+            color: white;
+          }
+
+          
+
+          
+
+          
+    
+    </style>
+	<body>
+	<header id="header" class="site-header header-scrolled text-white">
+		<nav id="header-nav" class="navbar navbar-expand-lg px-3">
+			<div class="container-fluid">
+			<a class="navbar-brand" href="{% url 'watch:index' %}">
+				<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbFAjqKXN9VRF5Er_nNKPExsLycXJ0Kzhu3boNTcmY9AyWIykDXXyn4Our7kdXqTAQStM&usqp=CAU" class="logo"
+				width="50" height="35">
+			</a>
+				<div class="offcanvas-body">
+				<ul id="navbar" class="navbar-nav text-uppercase flex-grow-1 pe-3">
+					<li class="nav-item">
+					<a class="nav-link me-4" href="{% url 'watch:index' %}">Home</a>
+					</li>
+					<li class="nav-item">
+					<a class="nav-link me-4" href="{% url 'watch:mens' %}">Men's</a>
+					</li>
+					<li class="nav-item">
+					<a class="nav-link me-4" href="{% url 'watch:womens' %}">Women's</a>
+					</li>
+					<li class="nav-item">
+					<a class="nav-link me-4" href="{% url 'watch:unisex' %}">Unisex</a>
+					</li>
+					<form
+					action="{% url 'watch:index' %}"
+					method="POST"
+					class="d-flex ms-auto"
+					role="search">
+					{% csrf_token %}
+					<input
+						class="form-control me-2"
+						type="search"
+						name="item_name"
+						placeholder="Search for products"
+						aria-label="Search" />
+					<button
+						class="btn btn-light me-4"
+						type="submit">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+						<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+						</svg>
+					</button>
+					</form>
+					{% if user.is_authenticated %}
+					<li class="nav-item">
+						<a class="nav-link d-flex position-relative" href="{% url 'watch:cart_view' %}" title="Cart">
+							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+								<path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+							  </svg>
+							<span class="badge badge-pill badge-danger notify position-absolute rounded-circle"
+								style="top: 0px; right: -4px; z-index: 1; min-width: 16px; height: 18px; line-height: 8px; background-color: #dc3545; color: #fff;">{{ cart_items_count }}</span>
+					</a>
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'watch:myorders' %}" title="My Orders">
+							<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-credit-card-fill" viewBox="0 0 16 16">
+								<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1"/>
+							  </svg>
+						</a>
+					</li>
+					</li>
+					<li class="nav-item">
+					<a class="nav-link" href="{% url 'profile' %}" title="Profile">
+						<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-person-square" viewBox="0 0 16 16">
+							<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+							<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+						  </svg>
+					</a>
+					</li>
+					<li class="nav-item">
+					<a class="nav-link" href="{% url 'logout' %}" title="Logout">
+						<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+							<path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+							<path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+						  </svg></a>
+					</li>
+					{% else %}
+					<li class="nav-item">
+					<a class="nav-link" href="{% url 'register' %}">
+						<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
+							<path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+							<path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+						  </svg>
+					</a>
+					</li>
+					<li class="nav-item">
+					<a class="nav-link" href="{% url 'login' %}"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+						<path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z"/>
+						<path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+					  </svg></a>
+					</li>
+					{% endif %}
+				</ul>
+				</div>
+			</div>
+		</nav>
+		</header>
+
+        
+          
+		{% if messages %}
+
+			{% for message in messages %}
+				<div class="alert alert-{{ message.tags }}">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+		{% endif %}
+
+        
+
+		{% block body %} {% endblock %}
+
+		<footer
+      class="footer mt-5"
+      style="background-color: #000000; color: white; padding: 30px 0"
+    >
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <h5 style="text-align: center;">About Us</h5>
+            <p>
+              NEXUS is your go-to destination for high-quality and stylish
+              timepieces. Discover the perfect watch for any occasion.
+            </p>
+          </div>
+          <div class="col-md-3">
+            <h5>Quick Links</h5>
+            <ul class="list-unstyled">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Products</a></li>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3">
+            <h5>Connect With Us</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a href="#" target="_blank"
+                  ><i class="fab fa-facebook"></i> Facebook</a
+                >
+              </li>
+              <li>
+                <a href="#" target="_blank"
+                  ><i class="fab fa-twitter"></i> Twitter</a
+                >
+              </li>
+              <li>
+                <a href="#" target="_blank"
+                  ><i class="fab fa-instagram"></i> Instagram</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-3">
+            <h5 style="text-align: center;">Contact Us</h5>
+            <address>
+              <p>
+                Email:
+                <a href="mailto:info@justwatches.com" style="color: blue"
+                  >info@nexus.com</a
+                >
+              </p>
+              <p>Phone: +1 (555) 123-4567</p>
+            </address>
+          </div>
+        </div>
+        <hr style="border-color: #2e5570" />
+        <div class="row mt-3">
+          <div class="col-md-12 text-center">
+            <p>&copy; 2024 NEXUS. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+		
+		<!-- Bootstrap Icons (for social media icons) -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+		
+          
+          <!-- Optional: Bootstrap Icons -->
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
+          
+	</body>
+	
+</html>
